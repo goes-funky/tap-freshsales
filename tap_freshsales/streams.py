@@ -100,8 +100,13 @@ class Contacts(Stream):
     """
     stream_id = 'contacts'
     stream_name = 'contacts'
+    name = "contact"
     # endpoint = 'api/filtered_search/contact' (POST with payload)-> response does not include all fields
     endpoint = 'api/contacts'
+    include = '?include=owner,sales_account,notes'
+    query = 'view/'
+    child = False
+    parent_id = False
     key_properties = ["id"]
     replication_method = "INCREMENTAL"
     replication_keys = ["updated_at"]
@@ -116,25 +121,70 @@ class Contacts(Stream):
 
             view_id = contact_filter['id']
             view_name = contact_filter['name']
-            grouped_entity = self.stream_name + "_" + str(view_id)
-            start = self.client.get_start(grouped_entity)
-            LOGGER.info("Syncing stream '{}' of view '{}' with ID {} from {}".format(
-                self.stream_name, view_name, view_id, start))
-            records = self.client.gen_request('GET', self.stream_name,
-                                              self.client.url(self.endpoint, query='view/' + str(view_id) +
-                                                                                   '?include=owner,sales_account'))
-            state_date = start
-            for record in records:
-                record_date = tap_utils.strftime(tap_utils.strptime(record['updated_at']))
-                if record_date >= start:
-                    state_date = record['updated_at']
-                    # return records that fulfill the date condition
-                    yield record
+            grouped_entity = self.stream_id + "_" + str(view_id)
 
-            # update stream state with 1 sec for the next data retrieval
-            state_date = tap_utils.strftime(tap_utils.strptime(state_date) + datetime.timedelta(seconds=1))
-            tap_utils.update_state(self.client.state, grouped_entity, state_date)
-            singer.write_state(self.client.state)
+            start = self.client.get_start(grouped_entity)
+            if not self.parent_id:
+                LOGGER.info(
+                "Syncing stream '{}' of view '{}' with ID {} from {}".format(self.stream_name, view_name, view_id, start))
+            endpoint = self.client.url(self.endpoint, query=self.query + str(view_id) + self.include)
+            records = self.client.gen_request('GET', self.stream_name, endpoint, name=self.child)
+
+            if self.parent_id:
+                for record in records:
+                    yield from self.sync_children(str(record['id']))
+            else:
+                state_date = start
+                for record in records:
+                    record_date = tap_utils.strftime(tap_utils.strptime(record['updated_at']))
+                    if record_date >= start:
+                        state_date = record['updated_at']
+                        # return records that fulfill the date condition
+                        yield record
+
+                # update stream state with 1 sec for the next data retrieval
+                state_date = tap_utils.strftime(tap_utils.strptime(state_date) + datetime.timedelta(seconds=1))
+                tap_utils.update_state(self.client.state, grouped_entity, state_date)
+                singer.write_state(self.client.state)
+
+    def sync_children(self, parent_id):
+        grouped_entity = self.stream_id + "_" + parent_id
+        start = self.client.get_start(grouped_entity)
+        LOGGER.info(
+            "Syncing stream '{}' of {} with ID {} from {}".format(self.stream_id, self.name, parent_id, start))
+        endpoint = self.client.url(self.endpoint, query=parent_id + '/' + self.child)
+        children = self.client.gen_request('GET', self.stream_name, endpoint, name=self.child)
+
+        state_date = start
+        for child in children:
+            if self.replication_method == 'INCREMENTAL':
+                record_date = tap_utils.strftime(tap_utils.strptime(child['updated_at']))
+                if record_date >= start:
+                    state_date = child['updated_at']
+                    # return records that fulfill the date condition
+                    yield child
+            else:
+                yield child
+
+        # update stream state with 1 sec for the next data retrieval
+        state_date = tap_utils.strftime(tap_utils.strptime(state_date) + datetime.timedelta(seconds=1))
+        tap_utils.update_state(self.client.state, grouped_entity, state_date)
+        singer.write_state(self.client.state)
+
+
+class ContactActivities(Contacts):
+    stream_id = 'contact_activities'
+    child = 'activities'
+    # Iteration is done per parent_id, otherwise per view
+    parent_id = True
+    include = ''
+    replication_method = "FULL_TABLE"
+    replication_keys = []
+
+
+class ContactNotes(Contacts):
+    stream_id = 'contact_notes'
+    child = 'notes'
 
 
 class Leads(Stream):
@@ -674,9 +724,12 @@ STREAM_OBJECTS = {
     'deal_products': DealProducts,
     'deal_pipelines': DealPipelines,
     'contact_statuses': ConstactStatuses,
-    # TODO: remove from inline entity call activity type & outcome
     'sales_activity_types': SalesActivityTypes,
     'sales_activity_outcomes': SalesActivityOutcomes,
     'sales_activity_entity_types': SalesActivityEntityTypes,
-    'lifecycle_stages': LifecycleStages
+    'lifecycle_stages': LifecycleStages,
+
+    # Contact Children
+    'contact_activities': ContactActivities,
+    'contact_notes': ContactNotes
 }
