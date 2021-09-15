@@ -1,0 +1,95 @@
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "description": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "created_at": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "updated_at": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "url": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "duration": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "creater_id": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "has_access": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "collab_context": {
+          "properties": {
+            "hasSlackViewAccess": {
+              "type": [
+                "null",
+                "boolean"
+              ]
+            },
+            "messageId": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          },
+          "type": [
+            "null",
+            "object"
+          ]
+        },
+        "targetable": {
+          "properties": {
+            "type": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "id": {
+              "type": [
+                "null",
+                "integer"
+              ]
+            }
+          },
+          "type": [
+            "null",
+            "object"
+          ]
+        }
+    }
+}

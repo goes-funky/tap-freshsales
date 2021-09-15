@@ -156,7 +156,7 @@ class Client(object):
         return resp
 
     # TODO: rewrite in more understandable way
-    def gen_request(self, method, stream, url, params=None, payload=None):
+    def gen_request(self, method, stream, url, params=None, payload=None, name=False):
         """
         Generator to yields rows of data for given stream
         1. FILTERS :: ['filters', 'meta']
@@ -225,13 +225,26 @@ class Client(object):
                         if stream != 'owners':
                             data.pop('users')
 
-                    if stream in list(data.keys()):
+                    returned_keys = list(data.keys())
+                    if stream in returned_keys:
                         first_key = stream
 
                     try:
-                        data_list = data[first_key]
-                        for row in data[first_key]:
+                        notes = False
+                        if first_key == 'contacts' and name == 'notes' and name in returned_keys:
+                            data_list = data[name]
+                            notes = True
+                            if not data_list:
+                                LOGGER.info("Contacts View in pagination %s does not have notes", page)
+                        else:
+                            data_list = data[first_key]
+
+                        for row in data_list:
                             yield row
+
+                        if notes:
+                            # when null notes, go to the next contact pagination
+                            data_list = data[first_key]
                     except Exception:
                         pass
 

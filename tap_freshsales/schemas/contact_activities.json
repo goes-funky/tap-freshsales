@@ -1,0 +1,72 @@
+{
+    "type": "object",
+    "properties": {
+        "composite_id": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "action_data": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "action_type":  {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "created_at": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "user_activity": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "targetable_type": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "targetable_id": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "actionable_type": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "actionable_id": {
+          "type": [
+            "null",
+            "integer"
+          ]
+        },
+        "targetable_name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "automation": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+    }
+}
