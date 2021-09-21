@@ -108,7 +108,8 @@ class Client(object):
 
     def create_get_request(self, endpoint, **kwargs):
         return requests.Request(method="GET",
-                                url=self.url(endpoint),
+                                # url=self.url(endpoint),
+                                url=endpoint,
                                 **kwargs)
 
     @backoff.on_exception(backoff.expo,
@@ -123,10 +124,13 @@ class Client(object):
         return response.json()
 
     def get(self, request_kwargs, *args, **kwargs):
-        req = self.create_get_request(**request_kwargs)
+        req = self.create_get_request(request_kwargs)
         return self.request_with_handling(req, *args, **kwargs)
 
     @tap_utils.ratelimit(1, 2)
+    @backoff.on_exception(backoff.expo,
+                          (RateLimitError, BadRequestError, BadGateway, TooManyError),
+                          max_time=900)
     def request(self, method, url, params=None, payload=None):
         """
         Rate limited API requests to fetch data from
@@ -145,6 +149,9 @@ class Client(object):
         LOGGER.info("GET {}".format(req.url))
         resp = self.session.send(req)
 
+        # Freshsales does not have a 'Retry-After' included in reponse header for 429 status code
+        # it has 'x-ratelimit-remaining' and 'x-ratelimit-reset'
+        # added backoff decorator for this
         if 'Retry-After' in resp.headers:
             retry_after = int(resp.headers['Retry-After'])
             LOGGER.info(
@@ -158,7 +165,7 @@ class Client(object):
     # TODO: rewrite in more understandable way
     def gen_request(self, method, stream, url, params=None, payload=None, name=False):
         """
-        Generator to yields rows of data for given stream
+        Generator to yield rows of data for given stream
         1. FILTERS :: ['filters', 'meta']
         2. STREAM or ENTITY :: ['{stream}', 'meta']
         example: (without entity included in params)
@@ -182,7 +189,12 @@ class Client(object):
         while True:
             params['page'] = page
             # data = self.get(url, params).json()
-            data = self.request(method, url, params, payload).json()
+            try:
+                data = self.request(method, url, params, payload).json()
+            except Exception as e:
+                LOGGER.warning("Exception on request: {}".format(e))
+                return []
+
             data_list = []
             if type(data) == dict:
                 first_key = list(data.keys())[0]
@@ -277,6 +289,7 @@ class Client(object):
     def raise_for_error(self, resp):
         try:
             resp.raise_for_status()
+            # resp.json()
         except (requests.HTTPError, requests.ConnectionError) as error:
             try:
                 error_code = resp.status_code
