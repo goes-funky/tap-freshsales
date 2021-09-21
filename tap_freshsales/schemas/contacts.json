@@ -97,6 +97,12 @@
                 "integer"
             ]
         },
+        "lead_score": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
         "owner_id": {
             "type": [
                 "null",
@@ -157,6 +163,18 @@
                 "string"
             ]
         },
+        "open_deals_amount": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "won_deals_amount": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
         "created_at": {
             "type": [
                 "null",
@@ -171,10 +189,35 @@
             ],
             "format": "date-time"
         },
+        "last_contacted": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "last_contacted_sales_activity_mode": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "last_contacted_mode": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
         "contact_status_id": {
             "type": [
                 "null",
                 "integer"
+            ]
+        },
+        "recent_note": {
+            "type": [
+                "null",
+                "string"
             ]
         }
     }
