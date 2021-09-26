@@ -12,6 +12,89 @@
                 "null",
                 "string"
             ]
+        },
+        "position": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "is_default": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "rotting_days": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "configs": {
+          "type": ["null", "array"],
+          "items": {
+            "type": ["null", "object"],
+            "properties": {
+              "field_name": {
+                "type": ["null", "string"]
+              },
+              "position": {
+                "type": ["null", "integer"]
+              },
+              "highlight": {
+                "type": ["null", "boolean"]
+              }
+            }
+          }
+        },
+        "aggregated_field": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "deal_stages": {
+          "type": ["null", "array"],
+          "items": {
+            "type": ["null", "object"],
+            "properties": {
+              "id": {
+                "type": ["null", "integer"]
+              },
+              "value": {
+                "type": ["null", "string"]
+              },
+              "name": {
+                "type": ["null", "string"]
+              },
+              "position": {
+                "type": ["null", "integer"]
+              },
+              "forecast_type": {
+                "type": ["null", "string"]
+              },
+              "deal_pipeline_id": {
+                "type": ["null", "integer"]
+              },
+              "choice_type": {
+                "type": ["null", "integer"]
+              },
+              "is_deleted": {
+                "type": ["null", "boolean"]
+              },
+              "probability": {
+                "type": ["null", "integer"]
+              },
+              "updated_at": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        }
+            }
+          }
         }
     }
 }

@@ -12,6 +12,36 @@
                 "null",
                 "string"
             ]
+        },
+        "internal_name": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "show_in_conversation": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "position": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "is_default": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "is_checkedin": {
+            "type": [
+                "null",
+                "boolean"
+            ]
         }
     }
 }

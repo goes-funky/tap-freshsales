@@ -12,6 +12,43 @@
                 "null",
                 "string"
             ]
+        },
+        "position": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "forecast_type": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "updated_at": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "deal_pipeline_id": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "choice_type": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "probability": {
+            "type": [
+                "null",
+                "integer"
+            ]
         }
     }
 }

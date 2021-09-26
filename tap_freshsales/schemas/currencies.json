@@ -7,19 +7,19 @@
                 "integer"
             ]
         },
-        "name": {
+        "currency_code": {
             "type": [
                 "null",
                 "string"
             ]
         },
-        "position": {
+        "is_active": {
             "type": [
                 "null",
-                "integer"
+                "boolean"
             ]
         },
-        "forecast_type": {
+        "exchange_rate": {
             "type": [
                 "null",
                 "string"

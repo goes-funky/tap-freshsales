@@ -3,6 +3,7 @@ import singer
 from singer import Transformer, metadata
 
 import tap_freshsales.streams
+from tap_freshsales import tap_utils
 from .streams import STREAM_OBJECTS
 
 logger = singer.get_logger()
@@ -54,11 +55,11 @@ def do_sync(client, config: dict, state: dict, catalog: singer.Catalog):
         logger.info("Syncing stream {}".format(stream))
         with Transformer() as transformer:
             for rec in stream_object.sync():
+
                 # update custom fields from data retrieved
-                custom_fields = rec.get('custom_fields', False)
+                custom_fields = rec.get('custom_field', False)
                 if custom_fields:
-                    rec.update(custom_fields)
-                    rec.pop('custom_fields')
+                    rec['custom_field'] = tap_utils.transform_dict(rec['custom_field'])
 
                 singer.write_record(
                     stream_id,

@@ -73,7 +73,6 @@ def do_discover(client):
             # catalog entry/ies added above, continue to next iteration
             continue
 
-        # TODO: add custom fields to discovered schema for existing entities?
         catalog_entry = {
             "stream": stream_name,
             "tap_stream_id": stream_name,

@@ -50,10 +50,16 @@
                 "string"
             ]
         },
-        "creater_id": {
+        "creator_id": {
             "type": [
                 "null",
                 "integer"
+            ]
+        },
+        "updater_id": {
+            "type": [
+                "null",
+                "string"
             ]
         },
         "created_at": {
@@ -64,6 +70,13 @@
             "format": "date-time"
         },
         "updated_at": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "completed_date": {
             "type": [
                 "null",
                 "string"
@@ -92,6 +105,12 @@
             "type": [
                 "null",
                 "string"
+            ]
+        },
+        "is_deleted": {
+            "type": [
+                "null",
+                "boolean"
             ]
         }
     }

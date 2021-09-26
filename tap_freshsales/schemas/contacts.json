@@ -19,6 +19,18 @@
                 "string"
             ]
         },
+        "display_name": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "avatar": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
         "job_title": {
             "type": [
                 "null",
@@ -37,6 +49,35 @@
                 "string"
             ]
         },
+        "emails": {
+          "type": ["null", "array"],
+          "items": {
+            "type": ["null", "object"],
+            "properties": {
+              "id": {
+                "type": ["null", "integer"]
+              },
+              "value": {
+                "type": ["null", "string"]
+              },
+              "is_primary": {
+                "type": ["null", "boolean"]
+              },
+              "label": {
+                "type": ["null", "string"]
+              },
+              "_destroy": {
+                "type": ["null", "boolean"]
+              }
+            }
+          }
+        },
+        "email_status": {
+          "type": [
+              "null",
+              "string"
+          ]
+      },
         "work_number": {
             "type": [
                 "null",
@@ -103,6 +144,12 @@
                 "integer"
             ]
         },
+        "lead_quality": {
+          "type": [
+              "null",
+              "string"
+          ]
+      },
         "owner_id": {
             "type": [
                 "null",
@@ -175,6 +222,24 @@
                 "string"
             ]
         },
+        "won_deals_count": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "open_deals_count": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "customer_fit": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
         "created_at": {
             "type": [
                 "null",
@@ -202,12 +267,40 @@
                 "string"
             ]
         },
+        "last_contacted_via_sales_activity": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "last_contacted_via_chat": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "last_seen": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
         "last_contacted_mode": {
             "type": [
                 "null",
                 "string"
             ]
         },
+        "last_assigned_at": {
+          "type": [
+              "null",
+              "string"
+          ],
+          "format": "date-time"
+      },
         "contact_status_id": {
             "type": [
                 "null",
@@ -218,6 +311,86 @@
             "type": [
                 "null",
                 "string"
+            ]
+        },
+        "completed_sales_sequences": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "active_sales_sequences": {
+          "items": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "type": [
+            "null",
+            "array"
+          ]
+        },
+        "team_user_ids": {
+          "items": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "type": [
+            "null",
+            "array"
+          ]
+        },
+        "subscription_status": {
+          "type": [
+              "null",
+              "integer"
+          ]
+      },
+        "custom_field": {
+          "type": ["null", "array"],
+          "items": {
+            "type": ["null", "object"],
+            "properties": {
+              "name": {
+                "type": ["null", "string"]
+              },
+              "value": {
+                "type": ["null", "string"]
+              }
+            }
+          }
+        },
+        "phone_numbers": {
+          "items": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "type": [
+            "null",
+            "array"
+          ]
+        },
+        "tags": {
+          "items": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "type": [
+            "null",
+            "array"
+          ]
+        },
+        "is_deleted": {
+            "type": [
+                "null",
+                "boolean"
             ]
         }
     }
