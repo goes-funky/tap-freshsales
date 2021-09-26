@@ -93,3 +93,13 @@ def check_config(config, required_keys):
     if missing_keys:
         raise Exception(
             "Config is missing required keys: {}".format(missing_keys))
+
+
+def transform_dict(dictionary):
+    # Cast custom fields to strings to match the schema.
+    res = []
+    for field_label, field_value in dictionary.items():
+        field_value = str(field_value).lower()
+        # configured with name && value in custom_field json schema
+        res.append({"name": field_label, "value": field_value})
+    return res

@@ -129,47 +129,144 @@
                 "integer"
             ]
         },
-        "custom_field[cf_preferred_communication_style]":  {
-            "type": ["null","string"]         
+        "open_deals_amount": {
+            "type": [
+                "null",
+                "string"
+            ]
         },
-        "custom_field[cf_email]":  {
-            "type": ["null","string"]         
+        "open_deals_count": {
+            "type": [
+                "null",
+                "integer"
+            ]
         },
-        "custom_field[cf_primary_contact]":  {
-            "type": ["null","string"]         
+        "won_deals_amount": {
+            "type": [
+                "null",
+                "string"
+            ]
         },
-        "custom_field[cf_whatsapp]":  {
-            "type": ["null","string"]         
+        "won_deals_count": {
+            "type": [
+                "null",
+                "integer"
+            ]
         },
-        "custom_field[cf_finance_point_of_contact]": {
+        "last_contacted": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "last_contacted_mode": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "avatar": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "recent_note": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "last_assigned_at": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "last_contacted_via_chat": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "last_contacted_via_sales_activity": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "last_contacted_sales_activity_mode": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "completed_sales_sequences": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "active_sales_sequences": {
+          "items": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "type": [
+            "null",
+            "array"
+          ]
+        },
+        "tags": {
+          "items": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "type": [
+            "null",
+            "array"
+          ]
+        },
+        "team_user_ids": {
+          "items": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "type": [
+            "null",
+            "array"
+          ]
+        },
+        "is_deleted": {
             "type": [
                 "null",
                 "boolean"
             ]
         },
-        "custom_field[cf_loading_point_of_contact]": {
-            "type": [
-                "null",
-                "boolean"
-            ]
-        },
-        "custom_field[cf_off-loading_point_of_contact]": {
-            "type": [
-                "null",
-                "boolean"
-            ]
-        },
-        "custom_field[cf_managing_director]": {
-            "type": [
-                "null",
-                "boolean"
-            ]
-        },
-        "custom_field[cf_notes]":  {
-            "type": ["null","string"]         
-        },
-        "custom_field[cf_contact_type]":  {
-            "type": ["null","string"]         
+        "custom_field": {
+          "type": ["null", "array"],
+          "items": {
+            "type": ["null", "object"],
+            "properties": {
+              "name": {
+                "type": ["null", "string"]
+              },
+              "value": {
+                "type": ["null", "string"]
+              }
+            }
+          }
         }
     }
 }
+

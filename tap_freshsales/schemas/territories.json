@@ -12,6 +12,12 @@
                 "null",
                 "string"
             ]
+        },
+        "position": {
+            "type": [
+                "null",
+                "integer"
+            ]
         }
     }
 }

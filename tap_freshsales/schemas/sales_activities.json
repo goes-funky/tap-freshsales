@@ -69,6 +69,12 @@
                 "integer"
             ]
         },
+        "updater_id": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
         "created_at": {
             "type": [
                 "null",
@@ -82,6 +88,43 @@
                 "string"
             ],
             "format": "date-time"
-        }
+        },
+        "latitude": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+        "longitude": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+        "location": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+        "remote_id": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+        "import_id": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+        "conversation_time": {
+            "format": "date-time",
+            "type": [
+              "null",
+              "string"
+            ]
+          }
     }
 }

@@ -12,6 +12,42 @@
                 "null",
                 "string"
             ]
+        },
+        "position": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "disabled": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "default": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "type": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "contact_status_ids": {
+          "items": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "type": [
+            "null",
+            "array"
+          ]
         }
     }
 }

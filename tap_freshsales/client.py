@@ -127,10 +127,19 @@ class Client(object):
         req = self.create_get_request(request_kwargs)
         return self.request_with_handling(req, *args, **kwargs)
 
+    def backoff_fn(details):
+        print("backoff ", details)
+        if details["tries"] >= 4:
+            print(f"sleeping")
+            # max delay could be one hour
+            time.sleep(900)  # 1800
+
     @tap_utils.ratelimit(1, 2)
     @backoff.on_exception(backoff.expo,
                           (RateLimitError, BadRequestError, BadGateway, TooManyError),
-                          max_time=900)
+                          max_tries=5,
+                          giveup=lambda e: e.response.status_code != 429,
+                          on_backoff=backoff_fn)
     def request(self, method, url, params=None, payload=None):
         """
         Rate limited API requests to fetch data from
@@ -162,7 +171,6 @@ class Client(object):
         self.raise_for_error(resp)
         return resp
 
-    # TODO: rewrite in more understandable way
     def gen_request(self, method, stream, url, params=None, payload=None, name=False):
         """
         Generator to yield rows of data for given stream
@@ -188,77 +196,21 @@ class Client(object):
 
         while True:
             params['page'] = page
-            # data = self.get(url, params).json()
-            try:
-                data = self.request(method, url, params, payload).json()
-            except Exception as e:
-                LOGGER.warning("Exception on request: {}".format(e))
-                return []
+            data = self.request(method, url, params, payload).json()
 
             data_list = []
             if type(data) == dict:
-                first_key = list(data.keys())[0]
-                data_list = data[first_key]
-
-                # FILTERS :: ['filters', 'meta'] -> no need for pagination
-                if first_key == 'filters':
-                    yield data
-                elif first_key == 'meta':
-                    # transfer page control incrementation here?
-                    if 'contacts' in data.keys():
-                        for row in data['contacts']:
-                            yield row
-                    else:
-                        break
-
-                # TODO: check - contacts in sales_accounts are not included in list of all contacts?
-                elif first_key == 'sales_accounts':
-                    if 'contacts' in data.keys():
-                        for row in data['contacts']:
-                            yield row
-                    else:
-                        break
-
-                elif first_key == 'module_customizations':
-                    # get only custom entities from list of entities in data
-                    data[first_key] = [x for x in data[first_key] if x.get('custom', True)]
-                    data_list = data[first_key]
-                    for row in data[first_key]:
-                        yield row
-
-                else:
-                    if "users" in data.keys():
-                        try:
-                            self.owners.append(
-                                data['users'][0])  # there is only one user per item
-                        except:
-                            LOGGER.info("item with no owner")
-
-                        if stream != 'owners':
-                            data.pop('users')
-
-                    returned_keys = list(data.keys())
-                    if stream in returned_keys:
-                        first_key = stream
-
-                    try:
-                        notes = False
-                        if first_key == 'contacts' and name == 'notes' and name in returned_keys:
-                            data_list = data[name]
-                            notes = True
-                            if not data_list:
-                                LOGGER.info("Contacts View in pagination %s does not have notes", page)
-                        else:
-                            data_list = data[first_key]
-
-                        for row in data_list:
-                            yield row
-
-                        if notes:
-                            # when null notes, go to the next contact pagination
-                            data_list = data[first_key]
-                    except Exception:
-                        pass
+                data_list = []
+                if stream in data.keys():
+                    data_list = data[stream]
+                if name in data.keys():
+                    data_list = data[name]
+                    if name == 'module_customizations':
+                        # get only custom entities from list of entities in data
+                        data[name] = [x for x in data[name] if x.get('custom', True)]
+                        data_list = data[name]
+                for row in data_list:
+                    yield row
 
                 if len(data_list) == PER_PAGE:
                     page += 1
@@ -282,14 +234,12 @@ class Client(object):
         endpoint in the supported streams
         """
         url = self.url(endpoint, query='filters')
-        request = self.gen_request('GET', endpoint, url)  # TODO: .get
-        filters = list(request)[0]['filters']
-        return filters
+        request = self.gen_request('GET', 'filters', url)
+        return list(request)
 
     def raise_for_error(self, resp):
         try:
             resp.raise_for_status()
-            # resp.json()
         except (requests.HTTPError, requests.ConnectionError) as error:
             try:
                 error_code = resp.status_code

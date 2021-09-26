@@ -43,6 +43,35 @@
               "string"
           ]
       },
+      "emails": {
+          "type": ["null", "array"],
+          "items": {
+            "type": ["null", "object"],
+            "properties": {
+              "id": {
+                "type": ["null", "integer"]
+              },
+              "value": {
+                "type": ["null", "string"]
+              },
+              "is_primary": {
+                "type": ["null", "boolean"]
+              },
+              "label": {
+                "type": ["null", "string"]
+              },
+              "_destroy": {
+                "type": ["null", "boolean"]
+              }
+            }
+          }
+        },
+      "email_status": {
+          "type": [
+              "null",
+              "string"
+          ]
+      },
       "work_number": {
           "type": [
               "null",
@@ -80,6 +109,12 @@
           ]
       },
       "country": {
+          "type": [
+              "null",
+              "string"
+          ]
+      },
+      "lead_quality": {
           "type": [
               "null",
               "string"
@@ -140,6 +175,12 @@
           ]
       },
       "keyword": {
+          "type": [
+              "null",
+              "string"
+          ]
+      },
+      "avatar": {
           "type": [
               "null",
               "string"
@@ -259,6 +300,18 @@
               "number"
           ]
       },
+      "deal[currency_id]": {
+          "type": [
+              "null",
+              "integer"
+          ]
+      },
+      "deal[base_currency_amount]": {
+          "type": [
+              "null",
+              "number"
+          ]
+      },
       "deal[expected_close]": {
           "type": [
               "null",
@@ -284,6 +337,158 @@
               "string"
           ],
           "format": "date-time"
-      }
-  }
+      },
+      "subscription_status": {
+          "type": [
+              "null",
+              "integer"
+          ]
+      },
+      "last_assigned_at": {
+          "type": [
+              "null",
+              "string"
+          ],
+          "format": "date-time"
+      },
+      "stage_updated_time": {
+          "type": [
+              "null",
+              "string"
+          ],
+          "format": "date-time"
+      },
+      "active_sales_sequences": {
+          "items": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "type": [
+            "null",
+            "array"
+          ]
+        },
+      "completed_sales_sequences": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+      "last_contacted_mode": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+      "last_contacted": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+      "last_contacted_via_chat": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+      "last_contacted_sales_activity_mode": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+      "last_contacted_via_sales_activity": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+      "last_seen": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+      "recent_note": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+      "tags": {
+          "items": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "type": [
+            "null",
+            "array"
+          ]
+        },
+      "team_user_ids": {
+          "items": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "type": [
+            "null",
+            "array"
+          ]
+        },
+      "custom_field": {
+          "type": ["null", "array"],
+          "items": {
+            "type": ["null", "object"],
+            "properties": {
+              "name": {
+                "type": ["null", "string"]
+              },
+              "value": {
+                "type": ["null", "string"]
+              }
+            }
+          }
+        },
+      "web_form_ids": {
+          "items": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "type": [
+            "null",
+            "array"
+          ]
+        },
+      "phone_numbers": {
+          "items": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "type": [
+            "null",
+            "array"
+          ]
+        },
+      "is_deleted": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        }
+    }
 }
