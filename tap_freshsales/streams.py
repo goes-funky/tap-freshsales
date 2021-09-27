@@ -110,7 +110,7 @@ class Contacts(Stream):
     stream_id = stream_name = 'contacts'
     name = "contact"
     endpoint = 'api/contacts'
-    include = ''
+    include = '?include=notes'
     query = 'view/'
     child = False
     parent_id = False
@@ -129,7 +129,7 @@ class Contacts(Stream):
                 LOGGER.info(
                     "Syncing stream '{}' of view '{}' with ID {}".format(self.stream_name, view_name, view_id))
             endpoint = self.client.url(self.endpoint, query=self.query + str(view_id) + self.include)
-            records = self.client.gen_request('GET', self.stream_name, endpoint, name=self.child)
+            records = self.client.gen_request('GET', self.stream_name, endpoint, name=self.child, parent_repeat=True)
 
             for record in records:
                 yield record
@@ -161,6 +161,7 @@ class ContactActivities(Contacts):
         LOGGER.info("Syncing stream activities from contacts")
         endpoint = self.client.url(self.endpoint)
         records = self.client.gen_request('POST', 'contacts', endpoint, payload=data)
+        state_date = start
         for record in records:
             state_date = record['updated_at']
 
@@ -168,13 +169,17 @@ class ContactActivities(Contacts):
                 self.stream_name, record['id'], state_date))
             endpoint = self.client.url('api/contacts', query=str(record['id']) + '/' + self.child)
             children = self.client.gen_request('GET', 'contacts', endpoint, name=self.child)
+            if isinstance(children, dict) and children.get("error", False):
+                LOGGER.warning("Exception on request: {}".format(children["error"]))
+                break
+
             for child in children:
                 yield child
 
-            # update stream state with 1 sec for the next data retrieval
-            state_date = tap_utils.strftime(tap_utils.strptime(state_date) + datetime.timedelta(seconds=1))
-            tap_utils.update_state(self.client.state, self.stream_id, state_date)
-            singer.write_state(self.client.state)
+        # update stream state with 1 sec for the next data retrieval
+        state_date = tap_utils.strftime(tap_utils.strptime(state_date) + datetime.timedelta(seconds=1))
+        tap_utils.update_state(self.client.state, self.stream_id, state_date)
+        singer.write_state(self.client.state)
 
 
 class Leads(Stream):

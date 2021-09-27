@@ -320,16 +320,10 @@
             ]
         },
         "active_sales_sequences": {
-          "items": {
             "type": [
-              "null",
-              "integer"
+                "null",
+                "string"
             ]
-          },
-          "type": [
-            "null",
-            "array"
-          ]
         },
         "team_user_ids": {
           "items": {
@@ -364,17 +358,25 @@
           }
         },
         "phone_numbers": {
-          "items": {
-            "type": [
-              "null",
-              "integer"
-            ]
+            "type": ["null", "array"],
+            "items": {
+              "type": ["null", "object"],
+              "properties": {
+                "id": {
+                  "type": ["null", "integer"]
+                },
+                "value": {
+                  "type": ["null", "string"]
+                },
+                "label": {
+                  "type": ["null", "string"]
+                },
+                "_destroy": {
+                  "type": ["null", "boolean"]
+                }
+              }
+            }
           },
-          "type": [
-            "null",
-            "array"
-          ]
-        },
         "tags": {
           "items": {
             "type": [

@@ -1,3 +1,5 @@
+import sys
+
 import requests
 import singer
 from singer import metrics
@@ -92,7 +94,6 @@ class Client(object):
         self.base_url = BASE_URL
         self.version = 'old'  # options: [ old | new ]
         # for new version of API, skip leads endpoint as it is removed
-        self.owners = []
 
     def prepare_and_send(self, request):
         return self.session.send(self.session.prepare_request(request))
@@ -127,19 +128,10 @@ class Client(object):
         req = self.create_get_request(request_kwargs)
         return self.request_with_handling(req, *args, **kwargs)
 
-    def backoff_fn(details):
-        print("backoff ", details)
-        if details["tries"] >= 4:
-            print(f"sleeping")
-            # max delay could be one hour
-            time.sleep(900)  # 1800
-
     @tap_utils.ratelimit(1, 2)
     @backoff.on_exception(backoff.expo,
                           (RateLimitError, BadRequestError, BadGateway, TooManyError),
-                          max_tries=5,
-                          giveup=lambda e: e.response.status_code != 429,
-                          on_backoff=backoff_fn)
+                          max_time=900)
     def request(self, method, url, params=None, payload=None):
         """
         Rate limited API requests to fetch data from
@@ -161,6 +153,8 @@ class Client(object):
         # Freshsales does not have a 'Retry-After' included in reponse header for 429 status code
         # it has 'x-ratelimit-remaining' and 'x-ratelimit-reset'
         # added backoff decorator for this
+
+        LOGGER.info("x-ratelimit-remaining {}".format(resp.headers.get('x-ratelimit-remaining', False)))
         if 'Retry-After' in resp.headers:
             retry_after = int(resp.headers['Retry-After'])
             LOGGER.info(
@@ -171,7 +165,7 @@ class Client(object):
         self.raise_for_error(resp)
         return resp
 
-    def gen_request(self, method, stream, url, params=None, payload=None, name=False):
+    def gen_request(self, method, stream, url, params=None, payload=None, name=False, parent_repeat=False):
         """
         Generator to yield rows of data for given stream
         1. FILTERS :: ['filters', 'meta']
@@ -196,23 +190,34 @@ class Client(object):
 
         while True:
             params['page'] = page
-            data = self.request(method, url, params, payload).json()
+            try:
+                data = self.request(method, url, params, payload).json()
+            except Exception as e:
+                # on error, break the iteration
+                return {"error": e}
 
             data_list = []
             if type(data) == dict:
                 data_list = []
-                if stream in data.keys():
-                    data_list = data[stream]
                 if name in data.keys():
                     data_list = data[name]
                     if name == 'module_customizations':
                         # get only custom entities from list of entities in data
                         data[name] = [x for x in data[name] if x.get('custom', True)]
                         data_list = data[name]
+                elif stream in data.keys():
+                    data_list = data[stream]
+
                 for row in data_list:
                     yield row
 
-                if len(data_list) == PER_PAGE:
+                # PAGINATION
+                records_per_page = len(data_list)
+                if parent_repeat:
+                    # In the same page have parent-child results, count & iterate parents
+                    # {"parent": [], children: []}
+                    records_per_page = len(data[stream])
+                if records_per_page == PER_PAGE:
                     page += 1
                 else:
                     break

@@ -212,16 +212,10 @@
             ]
         },
         "active_sales_sequences": {
-          "items": {
             "type": [
-              "null",
-              "integer"
+                "null",
+                "string"
             ]
-          },
-          "type": [
-            "null",
-            "array"
-          ]
         },
         "tags": {
           "items": {
