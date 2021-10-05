@@ -153,8 +153,7 @@ class Client(object):
         # Freshsales does not have a 'Retry-After' included in reponse header for 429 status code
         # it has 'x-ratelimit-remaining' and 'x-ratelimit-reset'
         # added backoff decorator for this
-
-        LOGGER.info("x-ratelimit-remaining {}".format(resp.headers.get('x-ratelimit-remaining', False)))
+        # LOGGER.info("x-ratelimit-remaining {}".format(resp.headers.get('x-ratelimit-remaining', False)))
         if 'Retry-After' in resp.headers:
             retry_after = int(resp.headers['Retry-After'])
             LOGGER.info(

@@ -158,8 +158,6 @@
             ]
         },
         "targetable": {
-          "type": ["null", "array"],
-          "items": {
             "type": ["null", "object"],
             "properties": {
               "type": {
@@ -169,7 +167,6 @@
                 "type": ["null", "integer"]
               }
             }
-          }
         },
         "appointment_attendee_ids": {
           "items": {

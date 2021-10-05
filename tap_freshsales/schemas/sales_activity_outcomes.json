@@ -12,6 +12,12 @@
                 "null",
                 "string"
             ]
+        },
+        "sales_activity_type_id": {
+            "type": [
+                "null",
+                "string"
+            ]
         }
     }
 }

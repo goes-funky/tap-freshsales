@@ -55,11 +55,14 @@ def do_sync(client, config: dict, state: dict, catalog: singer.Catalog):
         logger.info("Syncing stream {}".format(stream))
         with Transformer() as transformer:
             for rec in stream_object.sync():
-
                 # update custom fields from data retrieved
-                custom_fields = rec.get('custom_field', False)
-                if custom_fields:
-                    rec['custom_field'] = tap_utils.transform_dict(rec['custom_field'])
+
+                if "custom_field" in rec:
+                    if not rec["custom_field"]:
+                        rec["custom_field"] = []
+                    else:
+                        # rec.update(tap_utils.transform_dict(rec['custom_field']))
+                        rec.update({"custom_field": tap_utils.transform_dict(rec['custom_field'])})
 
                 singer.write_record(
                     stream_id,
