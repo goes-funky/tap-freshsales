@@ -145,6 +145,7 @@ class ContactActivities(Contacts):
     child = 'activities'
     endpoint = 'api/filtered_search/contact'
     replication_method = "INCREMENTAL"
+    key_properties = ["composite_id"]
     replication_keys = ["updated_at"]
 
     def sync(self):
