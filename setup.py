@@ -11,7 +11,7 @@ setup(
     py_modules=["tap_freshsales"],
     install_requires=[
         "singer-python==5.12.1",
-        "requests==2.25.1",
+        "requests==2.31.0",
     ],
     extras_require={
         'dev': [
