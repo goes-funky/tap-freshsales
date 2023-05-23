@@ -1,4 +1,4 @@
-requests==2.25.1
+requests==2.31.0
 singer-python==5.12.1
 singer-tools==0.4.1
 wrapt==1.12.1
